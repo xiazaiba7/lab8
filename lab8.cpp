@@ -2752,9 +2752,12 @@ int PrimaryExp(int opt,int numfei,int index)
 				tempstring = ch;
 				ident newident;
 				newident.name2=tempstring;
-				if(address.type==0)
+				if(ishanshu==false)
 				{
-					newident.value=newshuzu.value[address.value];
+					if(address.type==0)
+					{
+						newident.value=newshuzu.value[address.value];
+					}
 				}
 				newident.name="";
 				newident.type=2;
@@ -3404,7 +3407,7 @@ int FuncRParams(int index,func myfunc)
 				else if(shuzi[top1].type==1)
 				{
 					fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[top1].name2.c_str());
-					sprintf(ch,"%%x%d",numb);
+					sprintf(ch," i32 %%x%d",numb);
 				}
 				shican.push_back(ch);
 //				fprintf(out," i32 %s",shuzi[top1].name2.c_str());
@@ -3473,7 +3476,14 @@ int FuncRParams(int index,func myfunc)
 							}
 						}
 						/*到此为止数组参数符合要求*/
-						char ch[10];
+						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+						char ch[50];
+						string tempstring;
+						sprintf(ch,"%%x%d",numb);
+						tempstring = ch;
+						fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 0\n",++numb,tempstring.c_str());
+						sprintf(ch,"%%x%d",numb);
+						newshuzu.name2=ch;
 						sprintf(ch,"i32 *%s",newshuzu.name2.c_str());
 						shican.push_back(ch);
 						temptop++;
@@ -4059,7 +4069,10 @@ int FuncDef()
 			newfunction.name=temp;
 			newfunction.name2=ch;
 			nowfunc=newfunction;
-			ishanshu=true;
+			if(judgewd==3)
+			{
+				ishanshu=true;
+			}
 			if(symbol(letter[num])==3)
 			{
 				skipblock();
@@ -4116,6 +4129,7 @@ int FuncDef()
 							num++;
 						if(symbol(letter[num])==9)
 						{
+							ishanshu=false;
 							return 1;
 						}
 						else
