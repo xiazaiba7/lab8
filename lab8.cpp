@@ -3475,10 +3475,11 @@ int FuncRParams(int index,func myfunc,int currenttop)
 							}
 						}
 						/*到此为止数组参数符合要求*/
-//						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
 						char ch[50];
-//						string tempstring;
-//						sprintf(ch,"%%x%d",numb);
+						string tempstring;
+						sprintf(ch,"%%x%d",numb);
+						newshuzu.name2=ch;
 //						tempstring = ch;
 						fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 0\n",++numb,newshuzu.name2.c_str());
 						sprintf(ch,"%%x%d",numb);
