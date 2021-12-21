@@ -3397,9 +3397,14 @@ int FuncRParams(int index,func myfunc)
 				{
 					sprintf(ch," i32 %d",shuzi[top1].value);
 				}
-				else
+				else if(shuzi[top1].type==2)
 				{
 					sprintf(ch," i32 %s",shuzi[top1].name2.c_str());
+				}
+				else if(shuzi[top1].type==1)
+				{
+					fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[top1].name2.c_str());
+					sprintf(ch,"%%x%d",numb);
 				}
 				shican.push_back(ch);
 //				fprintf(out," i32 %s",shuzi[top1].name2.c_str());
@@ -3472,6 +3477,18 @@ int FuncRParams(int index,func myfunc)
 						sprintf(ch,"i32 *%s",newshuzu.name2.c_str());
 						shican.push_back(ch);
 						temptop++;
+						if(i!=n-1)
+						{
+							if(letter[num]==",")
+							{
+								num++;
+								skipblock();
+							}
+							else
+							{
+								return 0;
+							}
+						}
 						//fprintf(out,"i32 *%s",newshuzu.name2.c_str()); 
 					}
 					else
@@ -3562,6 +3579,18 @@ int FuncRParams(int index,func myfunc)
 						sprintf(ch,"i32 *%s",newshuzu.name2.c_str());
 						shican.push_back(ch);
 						temptop++;
+						if(i!=n-1)
+						{
+							if(letter[num]==",")
+							{
+								num++;
+								skipblock();
+							}
+							else
+							{
+								return 0;
+							}
+						}
 						
 					 } 
 				} 
@@ -3977,6 +4006,7 @@ int FuncFParams()
 		skipblock();
 		while(letter[num]==",")
 		{
+			fprintf(out,", ");
 			hanshujishu++;
 			num++;
 			skipblock();
