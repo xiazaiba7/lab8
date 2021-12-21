@@ -30,7 +30,8 @@ int shuzublock;
 bool isshuzudef; 
 bool ismain=false;
 bool ishanshu=false; 
-vector<string> shican;
+vector <string>shican[1000];
+int shicantop=0;
 struct ident 
 {
 	string name;
@@ -457,7 +458,7 @@ int VarDecl(int index);
 int Stmt(int index); 
 int Decl(int index);
 int Blockitem(int index);
-int FuncRParams(int index,func myfunc);
+int FuncRParams(int index,func myfunc,int currenttop);
 int RelExp(int index);
 int EqExp(int index);
 int LAndExp(int index);
@@ -1707,10 +1708,7 @@ int Stmt(int index)
 			int x=num;
 			while(Blockitem(newindex)>0)
 			{
-				while(letter[num]=="block")
-				{
-					num++;
-				}
+				skipblock();
 				x=num;
 			}
 			num=x;
@@ -1820,9 +1818,8 @@ int Stmt(int index)
 			}
 			else
 			{
-				printf("6\n");
-				num = j;
-				return 0;
+				fprintf(out,"          ret void\n ");
+				return 1;
 			}
 		}
 		else if(a==3)
@@ -2986,7 +2983,9 @@ int UnaryExp(int index)
 				{
 					int key=searchfunc(temp);
 					func myfunc=functions[key];
-					if(FuncRParams(index,myfunc)>0)
+					shicantop++;
+					int currenttop=shicantop;
+					if(FuncRParams(index,myfunc,currenttop)>0)
 					{
 						if(letter[num]==")")
 						{
@@ -3000,10 +2999,10 @@ int UnaryExp(int index)
 						if(myfunc.type=="void")
 						{
 							fprintf(out,"          call void %s (",myfunc.name2.c_str());
-							int n=shican.size();
+							int n=shican[currenttop].size();
 							for(int i=0;i<n;i++)
 							{
-								fprintf(out,"%s",shican[i].c_str());
+								fprintf(out,"%s",shican[currenttop][i].c_str());
 								if(i!=n-1)
 								{
 									fprintf(out,",");
@@ -3023,10 +3022,10 @@ int UnaryExp(int index)
 							newident.type=2;
 							newident.name="";
 							shuzi[++top1]=newident;
-							int n=shican.size();
+							int n=shican[currenttop].size();
 							for(int i=0;i<n;i++)
 							{
-								fprintf(out,"%s",shican[i].c_str());
+								fprintf(out,"%s",shican[currenttop][i].c_str());
 								if(i!=n-1)
 								{
 									fprintf(out,",");
@@ -3375,9 +3374,9 @@ int Cond(int index)
 	}
 	return 0;
 }
-int FuncRParams(int index,func myfunc)
+int FuncRParams(int index,func myfunc,int currenttop)
 {
-	shican.clear();
+	shican[currenttop].clear();
 	int temptop=0;
 	int n=myfunc.canshu.size();
 	skipblock();
@@ -3409,7 +3408,7 @@ int FuncRParams(int index,func myfunc)
 					fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[top1].name2.c_str());
 					sprintf(ch," i32 %%x%d",numb);
 				}
-				shican.push_back(ch);
+				shican[currenttop].push_back(ch);
 //				fprintf(out," i32 %s",shuzi[top1].name2.c_str());
 				top1--;
 				if(i!=n-1)
@@ -3476,16 +3475,16 @@ int FuncRParams(int index,func myfunc)
 							}
 						}
 						/*到此为止数组参数符合要求*/
-						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+//						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
 						char ch[50];
-						string tempstring;
-						sprintf(ch,"%%x%d",numb);
-						tempstring = ch;
-						fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 0\n",++numb,tempstring.c_str());
+//						string tempstring;
+//						sprintf(ch,"%%x%d",numb);
+//						tempstring = ch;
+						fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 0\n",++numb,newshuzu.name2.c_str());
 						sprintf(ch,"%%x%d",numb);
 						newshuzu.name2=ch;
 						sprintf(ch,"i32 *%s",newshuzu.name2.c_str());
-						shican.push_back(ch);
+						shican[currenttop].push_back(ch);
 						temptop++;
 						if(i!=n-1)
 						{
@@ -3587,7 +3586,7 @@ int FuncRParams(int index,func myfunc)
 							}
 						}
 						sprintf(ch,"i32 *%s",newshuzu.name2.c_str());
-						shican.push_back(ch);
+						shican[currenttop].push_back(ch);
 						temptop++;
 						if(i!=n-1)
 						{
@@ -3627,7 +3626,6 @@ int quanjuDecl()
 			}
 			if(b==1)
 			{		
-//				int j=num;
 				if(ConstDef(0)>0)
 				{
 					if(isshuzudef==true)
