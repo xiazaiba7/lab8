@@ -2116,11 +2116,10 @@ int Stmt(int index)
 						}
 						else if(shuzi[0].type==1)
 						{
-							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,address.name2.c_str());
+							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
 							sprintf(ch,"%%x%d",numb);
-							string tempstring = ch;
-							fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,tempstring.c_str());
 							shuzi[0].name2=ch;
+							fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());			
 							shuzi[0].type=3;
 						}
 						fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),if_block,out_block);
