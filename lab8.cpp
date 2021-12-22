@@ -6,8 +6,7 @@
 #include <queue>
 #include <stack>
 #include <iostream>
-//加入function的type属性表示是void还是int 
-//funrparams把没写完的部分写完
+//利用ispointer变量判断funcrparam里输出getelementptr语句 
  
 using namespace std;
 int length=0; 
@@ -3475,7 +3474,15 @@ int FuncRParams(int index,func myfunc,int currenttop)
 							}
 						}
 						/*到此为止数组参数符合要求*/
-						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+						if(newshuzu.ispointer==0)
+						{
+							fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+						}
+						else if(newshuzu.ispointer==1)
+						{
+							fprintf(out,"          %%x%d = load i32 *, i32* * %s\n",++numb,newshuzu.name2.c_str());
+						}
+//						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
 						char ch[50];
 						string tempstring;
 						sprintf(ch,"%%x%d",numb);
@@ -3553,7 +3560,15 @@ int FuncRParams(int index,func myfunc,int currenttop)
 						ident address=shuzi[top1];
 						top1--;
 						top2--;
-						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+						if(newshuzu.ispointer==0)
+						{
+							fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
+						}
+						else if(newshuzu.ispointer==1)
+						{
+							fprintf(out,"          %%x%d = load i32 *, i32* * %s\n",++numb,newshuzu.name2.c_str());
+						}
+//						fprintf(out,"          %%x%d = getelementptr [%d x i32],[%d x i32]* %s, i32 0, i32 0\n",++numb,newshuzu.length,newshuzu.length,newshuzu.name2.c_str());
 						char ch[50];
 						string tempstring;
 						sprintf(ch,"%%x%d",numb);
