@@ -1601,12 +1601,11 @@ int Vardef(int index)
 				{
 					if(InitVal(index)>0)
 					{
-//						while(top2!=-1)
-//						{
-//							operate(op[top2]);
-//							top2--;
-//						}
 						computeshuzi(index);
+						if(top1<0)
+						{
+							return 0;
+						}
 						if(shuzi[0].type==0)
 						{
 							fprintf(out,"          store i32 %d, i32* %s\n",shuzi[0].value,identstable[index].idents[identstable[index].top].name2.c_str());
@@ -2894,91 +2893,6 @@ int UnaryExp(int index)
 			{
 				num++;
 				skipblock();
-//				if(a==10&&letter[num]==")")
-//				{
-//					fprintf(out,"          %%x%d = call i32 @getint()\n",++numb);
-//					char ch[50];
-//					sprintf(ch,"%%x%d",numb);
-//					ident newident;
-//					newident.value=0;
-//					newident.name="";
-//					newident.name2=ch;
-//					newident.type=2;
-//					shuzi[++top1]=newident;
-//					num++;
-//					return 2;
-//				}
-//				else if(a==11&&letter[num]==")")
-//				{
-//					fprintf(out,"          %%x%d = call i32 @getch()\n",++numb);
-//					char ch[50];
-//					sprintf(ch,"%%x%d",numb);
-//					ident newident;
-//					newident.value=0;
-//					newident.name="";
-//					newident.name2=ch;
-//					newident.type=2;
-//					shuzi[++top1]=newident;
-//					num++;
-//					return 2;
-//				}
-//				else if(a==12)//get array
-//				{
-//					nowfunc.name="getarray";
-//					nowfunc.name2="@getarray"
-//					if(FuncRParams(index)>0)
-//					{
-//						fprintf(out,"          %%x%d = call i32 @getarray(i32* %%x%d)",numb+1,numb);
-//						numb--;
-//					}
-//				}
-//				else if(a==13)
-//				{
-//					if(FuncRParams(index)>0)
-//					{
-//						if(shuzi[0].type==1)
-//						{
-//							fprintf(out,"          %%x%d = load i32, i32* %2s\n",++numb,shuzi[0].name2.c_str());
-//							fprintf(out,"          call void @putint(i32 %%x%d)\n",numb);
-//						}
-//						else if(shuzi[0].type==0)
-//							fprintf(out,"          call void @putint(i32 %d)\n",shuzi[0].value);
-//						else if(shuzi[0].type==2)
-//							fprintf(out,"          call void @putint(i32 %s)\n",shuzi[0].name2.c_str());
-//						num++;
-//						return 2;
-//					}
-//					else
-//					{
-//						return 0;
-//					}
-//					
-//				}
-//				else if(a==14)
-//				{
-//					if(FuncRParams(index)>0)
-//					{
-//						if(shuzi[0].type==1)
-//						{
-//							fprintf(out,"          %%x%d = load i32, i32* %2s\n",++numb,shuzi[0].name2.c_str());
-//							fprintf(out,"          call void @putch(i32 %%x%d)\n",numb);
-//						}
-//						else if(shuzi[0].type==0)
-//							fprintf(out,"          call void @putch(i32 %d)\n",shuzi[0].value);
-//						else if(shuzi[0].type==2)
-//							fprintf(out,"          call void @putch(i32 %s)\n",shuzi[0].name2.c_str());
-//						num++;
-//						return 2;
-//					}
-//					else
-//					{
-//						return 0;
-//					}
-//				}
-//				else if(a==15)
-//				{
-//					
-//				}
 				if(a>=10&&a<=16)// 函数
 				{
 					int key=searchfunc(temp);
