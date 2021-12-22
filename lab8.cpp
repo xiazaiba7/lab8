@@ -950,6 +950,7 @@ int ConstDef(int index)
 				shuzu newshuzu;
 				newshuzu.name=constname;
 				newshuzu.length=0;
+				newshuzu.ispointer=0;
 				int n=identstable[index].shuzus.size();
 				for(int i=0;i<n;i++)
 				{
