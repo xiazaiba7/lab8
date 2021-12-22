@@ -4054,6 +4054,10 @@ int FuncDef()
 						{
 							fprintf(out,"          ret void\n");
 						}
+						else if(jw==1)
+						{
+							fprintf(out,"          ret i32 0\n");
+						}
 						while(letter[num]=="block")
 							num++;
 						if(symbol(letter[num])==9)
