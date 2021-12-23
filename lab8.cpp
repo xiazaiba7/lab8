@@ -2883,6 +2883,24 @@ int UnaryExp(int index)
 	{
 		num++;
 	}
+	int opt=1;
+	int numfei=0;
+	while(letter[num]=="+"||letter[num]=="-"||letter[num]=="!")
+	{
+		if(letter[num]=="-")
+		{
+			opt = -opt;
+		}
+		else if(letter[num]=="!")
+		{
+			numfei++;
+		}
+		num++;
+		while(letter[num]=="block")
+		{
+			num++;
+		}
+	}
 	int j=num;
 	if(letter[num]>="a"&&letter[num]<="z"||letter[num]>="A"&&letter[num]<="Z"||letter[num]=="_")
 	{
@@ -2947,6 +2965,33 @@ int UnaryExp(int index)
 								}
 							}
 							fprintf(out,")\n");
+							if(opt==-1)
+							{
+							
+								op[++top2]='(';
+								newident=shuzi[top1];
+								shuzi[++top1]=newident;
+								shuzi[top1-1].type=0;
+								shuzi[top1-1].value=0;
+								op[++top2]='-';
+								if(index>0)
+								{
+									while(op[top2]!='(')
+									{
+										operate(op[top2]);
+										top2--;
+									}
+								}
+								else
+								{
+									while(op[top2]!='(')
+									{
+										operatewithnoprint(op[top2]);
+										top2--;
+									}
+								}
+								top2--;
+							}
 							return 1;
 						}
 						else
@@ -2991,24 +3036,24 @@ int UnaryExp(int index)
 	{
 		num=j;
 	}
-	int opt=1;
-	int numfei=0;
-	while(letter[num]=="+"||letter[num]=="-"||letter[num]=="!")
-	{
-		if(letter[num]=="-")
-		{
-			opt = -opt;
-		}
-		else if(letter[num]=="!")
-		{
-			numfei++;
-		}
-		num++;
-		while(letter[num]=="block")
-		{
-			num++;
-		}
-	}
+//	int opt=1;
+//	int numfei=0;
+//	while(letter[num]=="+"||letter[num]=="-"||letter[num]=="!")
+//	{
+//		if(letter[num]=="-")
+//		{
+//			opt = -opt;
+//		}
+//		else if(letter[num]=="!")
+//		{
+//			numfei++;
+//		}
+//		num++;
+//		while(letter[num]=="block")
+//		{
+//			num++;
+//		}
+//	}
 	if(PrimaryExp(opt,numfei,index)>0)
 		return 1;
 	else
