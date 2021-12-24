@@ -3979,7 +3979,7 @@ int FuncFParam()
 							}
 						}
 					}
-					int init=0;
+					int init=1;
 					for(int i=weidu;i>=2;i--)
 					{
 						init=init*newshuzu.array.weishu[weidu];
