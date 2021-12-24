@@ -2756,6 +2756,18 @@ int PrimaryExp(int opt,int numfei,int index)
 						newident.value=newshuzu.value[address.value];
 					}
 				}
+				while(numfei>0)
+				{
+					fprintf(out,"          %%x%d = icmp eq i32 %s, 0\n",++numb,newident.name2.c_str());
+					sprintf(ch,"%%x%d",numb);
+					newident.name2=ch;
+					newident.type=3;
+					fprintf(out,"          %%x%d = zext i1 %s to i32\n",++numb,newident.name2.c_str());
+					sprintf(ch,"%%x%d",numb);
+					newident.name2=ch;
+					newident.type=2;
+					numfei--;
+				}
 				newident.name="";
 				newident.type=2;
 				shuzi[++top1]=newident;
@@ -2786,7 +2798,7 @@ int PrimaryExp(int opt,int numfei,int index)
 										newident1.name2=ch;
 										newident1.type=2; 
 									}
-								 } 
+								} 
 								while(numfei>0)
 								{
 									fprintf(out,"          %%x%d = icmp eq i32 %s, 0\n",++numb,newident1.name2.c_str());
