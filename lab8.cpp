@@ -2771,6 +2771,35 @@ int PrimaryExp(int opt,int numfei,int index)
 				newident.name="";
 				newident.type=2;
 				shuzi[++top1]=newident;
+				if(opt==-1)
+				{
+					op[++top2]='(';
+					ident newident2;
+					newident2.type=0;
+					newident2.value=0;
+					newident2.name="";
+					newident2.name2="";
+					shuzi[++top1]=newident2;//0
+					op[++top2]='-';
+					shuzi[++top1]=newident;
+					if(index>0)
+					{
+						while(op[top2]!='(')
+						{
+							operate(op[top2]);
+							top2--;
+						}
+					}
+					else
+					{
+						while(op[top2]!='(')
+						{
+							operatewithnoprint(op[top2]);
+							top2--;
+						}
+					}
+					top2--;
+				}
 			}
 			else
 			{
