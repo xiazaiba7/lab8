@@ -978,7 +978,7 @@ int ConstInitVal(int index)
 	{	
 		top1=-1;
 		top2=-1;
-		int address=0;
+		int address=-1;
 		int weidu=0;
 		shuzublock=0;
 		while(letter[num]=="block")
@@ -1013,7 +1013,6 @@ int ConstInitVal(int index)
 					address++;
 					identstable[index].shuzus.back().value.push_back(0);
 				}
-				address++;
 				weidu--;
 				num++;
 				skipblock();	
@@ -1057,7 +1056,9 @@ int ConstInitVal(int index)
 						}
 						skipblock();
 						computeshuzi(index);
+						address++; 
 						identstable[index].shuzus.back().value.push_back(shuzi[0].value);
+						
 						if(index>0)
 						{
 							fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 %d\n",++numb,basepoint.c_str(),address);
@@ -1067,7 +1068,6 @@ int ConstInitVal(int index)
 						{
 							top1=-1;
 							top2=-1;
-							address++;
 							num++;
 							skipblock();
 						}
