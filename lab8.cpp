@@ -1295,9 +1295,10 @@ int InitVal(int index)
 						skipblock();
 						computeshuzi(index);
 						identstable[index].shuzus.back().value.push_back(shuzi[0].value);
+						address++;
 						if(index>0)
 						{
-							fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 %d\n",++numb,basepoint.c_str(),++address);
+							fprintf(out,"          %%x%d = getelementptr i32,i32* %s, i32 %d\n",++numb,basepoint.c_str(),address);
 							fprintf(out,"          store i32 %d, i32* %%x%d\n",shuzi[0].value,numb);	
 						}
 						if(letter[num]==",")
