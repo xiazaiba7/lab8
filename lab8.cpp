@@ -78,7 +78,7 @@ struct func
 vector<func> functions;
 
 func nowfunc;
-identtable identstable[1000];
+identtable identstable[10000];
 ident shuzi[200000];
 int top1=-1,top2=-1;
 string temp;
@@ -130,7 +130,7 @@ void skipblock()
 int operate(char c)
 {
 	string num1="",num2="";
-	char ch[10];
+	char ch[100];
 	if(shuzi[top1].type==1)//是变量 
 	{
 		fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[top1].name2.c_str());
@@ -255,7 +255,7 @@ int operate(char c)
 }
 void PrintRel(int judge,ident yuan)
 {
-	char ch[10];
+	char ch[100];
 	if(yuan.type==1)
 	{
 		fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,yuan.name2.c_str());
@@ -349,7 +349,7 @@ void PrintEq(int judge,ident yuan)
  } 
 void PrintLAnd(ident yuan)
 {
-	char ch[10];
+	char ch[100];
 	if(yuan.type==2)
 	{
 		fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,yuan.name2.c_str());
