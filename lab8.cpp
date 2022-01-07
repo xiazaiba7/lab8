@@ -2099,7 +2099,7 @@ int Stmt(int index)
 						}
 						else if(shuzi[0].type==1)
 						{
-							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,address.name2.c_str());
+							fprintf(out,"          %%x%d = load i32, i32* %s\n",++numb,shuzi[0].name2.c_str());
 							sprintf(ch,"%%x%d",numb);
 							string tempstring = ch;
 							fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,tempstring.c_str());
@@ -3120,6 +3120,13 @@ int LAndExp(int index)
 		}
 		while(letter[num]=="&"&&letter[num+1]=="&")
 		{ 
+			if(shuzi[0].type==2)
+			{
+				char ch[20];
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
+				sprintf(ch,"%%x%d",numb);
+				shuzi[0].name2=ch;
+			}
 			int other_block=++blocknum;
 			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,out_block);
 			fprintf(out,"\n");
