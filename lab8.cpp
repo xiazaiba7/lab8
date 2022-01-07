@@ -3154,7 +3154,15 @@ int LAndExp(int index)
 			{
 				num++;
 			}
-			PrintLAnd(yuan);
+			if(shuzi[0].type==2)
+			{
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,yuan.name2.c_str());
+				char ch[20];
+				sprintf(ch,"%%x%d",numb);
+				shuzi[0].name2=ch;
+				shuzi[0].type=3;
+			}
+//			PrintLAnd(yuan);
 		}
 		return 1;
 	}
@@ -3218,7 +3226,15 @@ int LOrExp(int index)
 			{
 				num++;
 			}
-			PrintLOr(yuan);
+			if(shuzi[0].type==2)
+			{
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,yuan.name2.c_str());
+				char ch[20];
+				sprintf(ch,"%%x%d",numb);
+				shuzi[0].name2=ch;
+				shuzi[0].type=3;
+			}
+//			PrintLOr(yuan);
 		}
 		return 1;
 	}
