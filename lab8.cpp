@@ -2103,6 +2103,7 @@ int Stmt(int index)
 							sprintf(ch,"%%x%d",numb);
 							string tempstring = ch;
 							fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,tempstring.c_str());
+							sprintf(ch,"%%x%d",numb);
 							shuzi[0].name2=ch;
 							shuzi[0].type=3;
 						}
@@ -3168,7 +3169,7 @@ int LAndExp(int index)
 			{
 				num++;
 			}
-			PrintLAnd(yuan);
+//			PrintLAnd(yuan);
 		}
 		return 1;
 	}
@@ -3223,7 +3224,7 @@ int LOrExp(int index)
 			{
 				num++;
 			}
-			PrintLOr(yuan);
+//			PrintLOr(yuan);
 		}
 		return 1;
 	}
