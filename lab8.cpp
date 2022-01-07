@@ -11,6 +11,7 @@
 using namespace std;
 int length=0; 
 int num;
+int if_block,out_block;
 int numb=-1;
 int blocknum;
 int tempv;
@@ -1554,10 +1555,7 @@ int Stmt(int index)
 		num++;
 		blocknum++;
 		int newindex=blocknum;
-		while(letter[num]=="block")
-		{
-			num++;
-		}
+		skipblock(); 
 		identstable[newindex].outnum=index;
 		identstable[newindex].top=0;
 		vector <shuzu> shuzus;
@@ -1952,10 +1950,9 @@ int Stmt(int index)
 			if(letter[num]=="(")
 			{
 				num++;
-				while(letter[num]=="block")
-				{
-					num++;
-				}		
+				skipblock();
+				if_block=++blocknum;
+				out_block=++blocknum;		
 				if(Cond(index)>0)
 				{
 					while(letter[num]=="block")
@@ -1969,8 +1966,7 @@ int Stmt(int index)
 						{
 							num++;
 						}
-						int if_block=++blocknum;
-						int out_block=++blocknum;
+						
 						if(shuzi[0].type==2)
 						{
 							fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
@@ -3123,7 +3119,11 @@ int LAndExp(int index)
 			num++;
 		}
 		while(letter[num]=="&"&&letter[num+1]=="&")
-		{
+		{ 
+			int other_block=++blocknum;
+			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,out_block);
+			fprintf(out,"\n");
+			fprintf(out,"          basic_block_%d:\n",other_block);
 			if(index>0)
 			{
 				while(top2!=-1)
@@ -3173,18 +3173,17 @@ int LAndExp(int index)
 }
 int LOrExp(int index)
 {
-	while(letter[num]=="block")
-	{
-		num++;
-	}
+	skipblock();
 	if(LAndExp(index)>0)
 	{
-		while(letter[num]=="block")
-		{
-			num++;
-		}
+		skipblock();
+		
 		while(letter[num]=="|"&&letter[num+1]=="|")
 		{
+			int other_block=++blocknum;
+			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),if_block,other_block);
+			fprintf(out,"\n");
+			fprintf(out,"          basic_block_%d:\n",other_block);
 			ident yuan=shuzi[0];
 			top1=-1;
 			top2=-1;
