@@ -4,5 +4,5 @@ image = { source = "dockerfile", path = "." }
 
 run = [
   "cat $input",
-  "./mdarray $input $ir",
+  "./short_circuit $input $ir",
 ]
