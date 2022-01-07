@@ -10,8 +10,8 @@
  
 using namespace std;
 int length=0; 
+int all_if_block,all_out_block;
 int num;
-int if_block,out_block;
 int numb=-1;
 int blocknum;
 int tempv;
@@ -1951,8 +1951,10 @@ int Stmt(int index)
 			{
 				num++;
 				skipblock();
-				if_block=++blocknum;
-				out_block=++blocknum;		
+				int if_block=++blocknum;
+				int out_block=++blocknum;
+				all_if_block=if_block;
+				all_out_block=out_block;		
 				if(Cond(index)>0)
 				{
 					while(letter[num]=="block")
@@ -2851,12 +2853,13 @@ int UnaryExp(int index)
 							ident newident;
 							 
 							fprintf(out,"          %%x%d = call i32 %s (",++numb,myfunc.name2.c_str());
+							
 							char ch[20];
 							sprintf(ch,"%%x%d",numb);
 							newident.name2=ch;
 							newident.type=2;
 							newident.name="";
-							shuzi[++top1]=newident;
+							
 							int n=shican[currenttop].size();
 							for(int i=0;i<n;i++)
 							{
@@ -2867,6 +2870,19 @@ int UnaryExp(int index)
 								}
 							}
 							fprintf(out,")\n");
+							while(numfei>0)
+							{
+								fprintf(out,"          %%x%d = icmp eq i32 %s, 0\n",++numb,newident.name2.c_str());
+								sprintf(ch,"%%x%d",numb);
+								newident.name2=ch;
+								newident.type=3;
+								fprintf(out,"          %%x%d = zext i1 %s to i32\n",++numb,newident.name2.c_str());
+								sprintf(ch,"%%x%d",numb);
+								newident.name2=ch;
+								newident.type=2;
+								numfei--;
+							}
+							shuzi[++top1]=newident;
 							if(opt==-1)
 							{
 							
@@ -2914,21 +2930,6 @@ int UnaryExp(int index)
 				return 0;
 			}
 		}
-//		else if(a==3)
-//		{
-//			num=j;
-//			int key=searchfunc(temp);
-//			if(key==-1)
-//			{
-//				return 0;
-//			}
-//			nowfunc=functions[key];
-//			if(FuncRParams(index)>0)//判断传入参数类型相符 
-//			{
-//				//写点东西	
-//			}
-//			
-//		}
 		else
 		{
 			num=j;
@@ -2938,24 +2939,6 @@ int UnaryExp(int index)
 	{
 		num=j;
 	}
-//	int opt=1;
-//	int numfei=0;
-//	while(letter[num]=="+"||letter[num]=="-"||letter[num]=="!")
-//	{
-//		if(letter[num]=="-")
-//		{
-//			opt = -opt;
-//		}
-//		else if(letter[num]=="!")
-//		{
-//			numfei++;
-//		}
-//		num++;
-//		while(letter[num]=="block")
-//		{
-//			num++;
-//		}
-//	}
 	if(PrimaryExp(opt,numfei,index)>0)
 		return 1;
 	else
@@ -3121,17 +3104,6 @@ int LAndExp(int index)
 		}
 		while(letter[num]=="&"&&letter[num+1]=="&")
 		{ 
-			if(shuzi[0].type==2)
-			{
-				char ch[20];
-				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
-				sprintf(ch,"%%x%d",numb);
-				shuzi[0].name2=ch;
-			}
-			int other_block=++blocknum;
-			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,out_block);
-			fprintf(out,"\n");
-			fprintf(out,"          basic_block_%d:\n",other_block);
 			if(index>0)
 			{
 				while(top2!=-1)
@@ -3148,6 +3120,19 @@ int LAndExp(int index)
 					top2--;
 				}
 			}
+			if(shuzi[0].type==2)
+			{
+				char ch[20];
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
+				sprintf(ch,"%%x%d",numb);
+				shuzi[0].name2=ch;
+				shuzi[0].type=3;
+			}
+			int other_block=++blocknum;
+			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,all_out_block);
+			fprintf(out,"\n");
+			fprintf(out,"          basic_block_%d:\n",other_block);
+			
 			ident yuan=shuzi[0];
 			top1=-1;
 			top2=-1;
@@ -3188,10 +3173,19 @@ int LOrExp(int index)
 		
 		while(letter[num]=="|"&&letter[num+1]=="|")
 		{
+			if(shuzi[0].type==2)
+			{
+				char ch[20];
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
+				sprintf(ch,"%%x%d",numb);
+				shuzi[0].name2=ch;
+				shuzi[0].type=3;
+			}
 			int other_block=++blocknum;
-			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),if_block,other_block);
+			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),all_if_block,other_block);
 			fprintf(out,"\n");
 			fprintf(out,"          basic_block_%d:\n",other_block);
+			
 			ident yuan=shuzi[0];
 			top1=-1;
 			top2=-1;
