@@ -3156,7 +3156,7 @@ int LAndExp(int index)
 			}
 			if(shuzi[0].type==2)
 			{
-				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,yuan.name2.c_str());
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
 				char ch[20];
 				sprintf(ch,"%%x%d",numb);
 				shuzi[0].name2=ch;
@@ -3228,7 +3228,7 @@ int LOrExp(int index)
 			}
 			if(shuzi[0].type==2)
 			{
-				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,yuan.name2.c_str());
+				fprintf(out,"          %%x%d = icmp ne i32 %s, 0\n",++numb,shuzi[0].name2.c_str());
 				char ch[20];
 				sprintf(ch,"%%x%d",numb);
 				shuzi[0].name2=ch;
