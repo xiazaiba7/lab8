@@ -3169,7 +3169,7 @@ int LAndExp(int index)
 			{
 				num++;
 			}
-//			PrintLAnd(yuan);
+			PrintLAnd(yuan);
 		}
 		return 1;
 	}
@@ -3224,7 +3224,7 @@ int LOrExp(int index)
 			{
 				num++;
 			}
-//			PrintLOr(yuan);
+			PrintLOr(yuan);
 		}
 		return 1;
 	}
