@@ -1986,7 +1986,7 @@ int Stmt(int index)
 							shuzi[0].name2=ch;		
 							shuzi[0].type=3;
 						}
-						fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),if_block,all_out_block);
+						fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),if_block,out_block);
 						fprintf(out,"\n");
 						fprintf(out,"          basic_block_%d:\n",if_block);
 						if(Stmt(index)>0)
@@ -2004,16 +2004,16 @@ int Stmt(int index)
 									{
 										num++;
 									}
-									int else_block=all_out_block;
-									all_out_block=++blocknum;
-									fprintf(out,"          br label %%basic_block_%d\n",all_out_block);
+									int else_block=out_block;
+									out_block=++blocknum;
+									fprintf(out,"          br label %%basic_block_%d\n",out_block);
 									fprintf(out,"\n");
 									fprintf(out,"          basic_block_%d:\n",else_block);
 									if(Stmt(index)>0)
 									{
-										fprintf(out,"          br label %%basic_block_%d\n",all_out_block);
+										fprintf(out,"          br label %%basic_block_%d\n",out_block);
 										fprintf(out,"\n");
-										fprintf(out,"          basic_block_%d:\n",all_out_block);
+										fprintf(out,"          basic_block_%d:\n",out_block);
 										return 4;
 									}
 									else
@@ -2023,9 +2023,9 @@ int Stmt(int index)
 								}
 								else
 								{
-									fprintf(out,"          br label %%basic_block_%d\n",all_out_block);
+									fprintf(out,"          br label %%basic_block_%d\n",out_block);
 									fprintf(out,"\n");
-									fprintf(out,"          basic_block_%d:\n",all_out_block);
+									fprintf(out,"          basic_block_%d:\n",out_block);
 									num=x;
 									return 4;
 								}
@@ -3120,6 +3120,18 @@ int LAndExp(int index)
 					top2--;
 				}
 			}
+			int flag=0;
+			int j=num;
+			while(letter[num]!="{")
+			{
+				num++;
+				if(letter[num]=="|")
+				{
+					flag=1;
+					break;
+				}
+			}
+			num=j;
 			if(shuzi[0].type==2)
 			{
 				char ch[20];
@@ -3129,10 +3141,18 @@ int LAndExp(int index)
 				shuzi[0].type=3;
 			}
 			int other_block=++blocknum;
-			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,all_out_block);
-			fprintf(out,"\n");
-			fprintf(out,"          basic_block_%d:\n",other_block);
-			
+			if(flag==0)
+			{
+				fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,all_out_block);
+				fprintf(out,"\n");
+				fprintf(out,"          basic_block_%d:\n",other_block);
+			}
+			else
+			{
+				fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),other_block,other_block+1);
+				fprintf(out,"\n");
+				fprintf(out,"          basic_block_%d:\n",other_block);	
+			}
 			ident yuan=shuzi[0];
 			top1=-1;
 			top2=-1;
@@ -3177,7 +3197,7 @@ int LOrExp(int index)
 	skipblock();
 	if(LAndExp(index)>0)
 	{
-		skipblock();
+		skipblock();		
 		while(letter[num]=="|"&&letter[num+1]=="|")
 		{
 			if(shuzi[0].type==2)
@@ -3188,11 +3208,11 @@ int LOrExp(int index)
 				shuzi[0].name2=ch;
 				shuzi[0].type=3;
 			}
-			
-			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),all_if_block,all_out_block);
+			int other_block=++blocknum;
+			fprintf(out,"          br i1 %s ,label %%basic_block_%d, label %%basic_block_%d\n",shuzi[0].name2.c_str(),all_if_block,other_block);
 			fprintf(out,"\n");
-			fprintf(out,"          basic_block_%d:\n",all_out_block);
-			all_out_block=++blocknum;
+			fprintf(out,"          basic_block_%d:\n",other_block);
+			
 			ident yuan=shuzi[0];
 			top1=-1;
 			top2=-1;
