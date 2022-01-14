@@ -3122,7 +3122,7 @@ int LAndExp(int index)
 			}
 			int flag=0;
 			int j=num;
-			while(letter[num]!="{")
+			while(letter[num]!="{"&&letter[num]!=";")
 			{
 				num++;
 				if(letter[num]=="|")
